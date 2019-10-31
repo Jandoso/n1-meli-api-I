@@ -1,4 +1,5 @@
 const alunas = require('../model/alunas.json');
+const fs = require('fs');
 
 exports.get = (req, res) => {
     console.log(req.url)
@@ -53,6 +54,39 @@ exports.getIdade = (req, res) => {
     const idade = calcularIdade(dataDeNascimento[2], dataDeNascimento[1], dataDeNascimento[0])
     res.status(200).send(`A aluna tem ${idade} anos`)
 }
+
+exports.post = (req, res) => {
+    const { nome, dateOfBirth, nasceuEmSp, id, livros } = req.body;
+    alunas.push({ nome, dateOfBirth, nasceuEmSp, id, livros });
+
+    fs.writeFile('./src/model/alunas.json', JSON.stringify(alunas), 'utf8', function(err){
+        if(err){
+            return res.status(500).send({ message: err });
+        }
+        console.log("O arquivo foi salvo com sucesso!");
+    });
+
+    return res.status(201).send(alunas);
+};
+
+exports.postBooks = (req, res) => {
+    const id = req.params.id;
+    const aluna = alunas.find(aluna => aluna.id == id);
+    if(!aluna){
+        res.send('Não encontramos esta aluna!');
+    }
+    const { titulo, leu } = req.body;
+    alunas[aluna.id -1].livros.push({ titulo, leu });
+
+    fs.writeFile('./src/model/alunas.json', JSON.stringify(alunas), 'utf8', function(err){
+        if(err){
+            return res.status(500).send({ message: err });
+        }
+        console.log('O arquivo foi salvo com sucesso!');
+    });
+
+    res.status(201).send(alunas[aluna.id -1].livros);
+};
 
 
     

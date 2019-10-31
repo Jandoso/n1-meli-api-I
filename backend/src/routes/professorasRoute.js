@@ -7,4 +7,6 @@ router.get('/nomes', professorasController.getNomes);
 router.get('/linguagens', professorasController.getLinguagens)
 router.get('/signos', professorasController.getSignos)
 
+router.post('/', professorasController.post);
+
 module.exports = router; 

@@ -8,4 +8,7 @@ router.get('/:id', alunasController.getById);
 router.get('/:id/idadealuna', alunasController.getIdade)
 router.get('/:id/books', alunasController.getBooks);
 
+router.post('/', alunasController.post);
+router.post('/:id/books', alunasController.postBooks);
+
 module.exports = router;
